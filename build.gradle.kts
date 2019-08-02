@@ -20,7 +20,7 @@ dependencies {
 gradlePlugin {
     plugins {
         create("vmOptionsPlugin") {
-            id = "dev.afanasev.gradle-vmoptions"
+            id = "dev.afanasev.gradle-idea-vmoptions"
             implementationClass = "dev.afanasev.gradle.vmoptions.VMOptionsPlugin"
         }
     }

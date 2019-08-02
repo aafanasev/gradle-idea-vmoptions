@@ -1,1 +1,1 @@
-rootProject.name = "gradle-vmoptions"
+rootProject.name = "gradle-idea-vmoptions"

@@ -1,3 +1,3 @@
-# [WIP] Gradle VM Options
+# [WIP] Gradle IDEA VM Options
 
-Intellij IDEA / Android Studio VM options reader and publisher. Helps to analyse your IDE configuration. 
+Gradle plugin that helps to analyse your Intellij IDEA / Android Studio configuration. 
