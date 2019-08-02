@@ -10,7 +10,11 @@ import java.io.File
 private const val VM_OPTIONS_PROPERTY = "jb.vmOptionsFile"
 private const val USERNAME_PROPERTY = "user.name"
 
-open class VMOptionsTask : DefaultTask() {
+open class PublishVMOptionsTask : DefaultTask() {
+
+    init {
+        group = "publishing"
+    }
 
     @TaskAction
     fun taskAction() {
