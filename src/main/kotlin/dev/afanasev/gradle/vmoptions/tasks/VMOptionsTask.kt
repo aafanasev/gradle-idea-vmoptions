@@ -1,6 +1,6 @@
 package dev.afanasev.gradle.vmoptions.tasks
 
-import dev.afanasev.gradle.vmoptions.log.Logger
+import dev.afanasev.gradle.vmoptions.VMOptionsPluginExtension
 import dev.afanasev.gradle.vmoptions.publishers.SystemOutVMOptionsPublisher
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -13,6 +13,11 @@ open class VMOptionsTask : DefaultTask() {
 
     @TaskAction
     fun taskAction() {
+        val ext = extensions.findByType(VMOptionsPluginExtension::class.java) ?: VMOptionsPluginExtension()
+        if (!ext.enabled) {
+            logger.debug("Gradle VM Options plugin disabled")
+        }
+
         val paths = System.getProperty(VM_OPTIONS_PROPERTY, "")
         val username = System.getProperty(USERNAME_PROPERTY, "unknown")
 
@@ -20,7 +25,7 @@ open class VMOptionsTask : DefaultTask() {
             val options = mutableSetOf<String>()
 
             paths.split(",").forEach {
-                Logger.log("Reading $it")
+                logger.debug("Reading VM Options from $it")
 
                 File(it).useLines { lines ->
                     lines.filter { line ->
@@ -32,9 +37,8 @@ open class VMOptionsTask : DefaultTask() {
             }
 
             SystemOutVMOptionsPublisher().publish(username, options)
-
         } else {
-            Logger.log("empty")
+            logger.debug("Gradle VM Options plugin was executed not from IDE")
         }
     }
 
