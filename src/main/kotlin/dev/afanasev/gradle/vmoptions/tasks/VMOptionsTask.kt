@@ -1,6 +1,7 @@
 package dev.afanasev.gradle.vmoptions.tasks
 
 import dev.afanasev.gradle.vmoptions.VMOptionsPluginExtension
+import dev.afanasev.gradle.vmoptions.publishers.InfluxDbPublisher
 import dev.afanasev.gradle.vmoptions.publishers.SystemOutPublisher
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -13,9 +14,10 @@ open class VMOptionsTask : DefaultTask() {
 
     @TaskAction
     fun taskAction() {
-        val ext = extensions.findByType(VMOptionsPluginExtension::class.java) ?: VMOptionsPluginExtension()
+        val ext = project.extensions.findByType(VMOptionsPluginExtension::class.java) ?: VMOptionsPluginExtension()
         if (!ext.enabled) {
             logger.info("Gradle VM Options plugin disabled")
+            return
         }
 
         val paths = System.getProperty(VM_OPTIONS_PROPERTY, "")
@@ -36,9 +38,17 @@ open class VMOptionsTask : DefaultTask() {
                 }
             }
 
-            SystemOutPublisher().publish(username, options)
+            publish(ext, username, options)
         } else {
             logger.debug("Gradle VM Options plugin was executed not from IDE")
+        }
+    }
+
+    private fun publish(ext: VMOptionsPluginExtension, username: String, vmOptions: Collection<String>) {
+        ext.influxDb?.let {
+            InfluxDbPublisher(it.url, it.username, it.password).publish(username, vmOptions)
+        } ?: run {
+            SystemOutPublisher().publish(username, vmOptions)
         }
     }
 
