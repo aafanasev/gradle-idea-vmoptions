@@ -27,7 +27,7 @@ class InfluxDbPublisher(
 
         val record = Point.measurement("vmoptions")
                 .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("username", username)
+                .tag("username", username)
                 .addField("vmoptions", vmOptions.toString())
                 .build()
 
