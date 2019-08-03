@@ -15,6 +15,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("gradle-plugin-api"))
+    implementation("org.influxdb:influxdb-java:2.15")
 }
 
 gradlePlugin {

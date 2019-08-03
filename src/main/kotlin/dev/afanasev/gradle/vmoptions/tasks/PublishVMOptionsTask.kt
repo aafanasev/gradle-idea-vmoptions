@@ -49,11 +49,13 @@ open class PublishVMOptionsTask : DefaultTask() {
     }
 
     private fun publish(ext: VMOptionsPluginExtension, username: String, vmOptions: Collection<String>) {
-        ext.influxDb?.let {
-            InfluxDbPublisher(it.url, it.username, it.password).publish(username, vmOptions)
+        val publisher = ext.influxDb?.let {
+            InfluxDbPublisher(it.url, it.username, it.password, it.database, it.retentionPolicy)
         } ?: run {
-            SystemOutPublisher().publish(username, vmOptions)
+            SystemOutPublisher()
         }
+
+        publisher.publish(username, vmOptions)
     }
 
 }
