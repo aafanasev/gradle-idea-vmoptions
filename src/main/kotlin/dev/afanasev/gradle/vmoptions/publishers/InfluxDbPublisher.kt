@@ -19,7 +19,11 @@ class InfluxDbPublisher(
             vmOptions: Collection<String>
     ) {
         val logger = Logging.getLogger(InfluxDbPublisher::class.java)
-        val influx = InfluxDBFactory.connect(dbUrl, dbUsername, dbPassword)
+        val influx = if (dbUsername.isNotEmpty() && dbPassword.isNotEmpty()) {
+            InfluxDBFactory.connect(dbUrl, dbUsername, dbPassword)
+        } else {
+            InfluxDBFactory.connect(dbUrl)
+        }
 
         influx.enableBatch(BatchOptions.DEFAULTS.exceptionHandler { _, throwable ->
             logger.lifecycle("Cannot write to InfluxDB: $dbUrl, db: $dbName", throwable)
